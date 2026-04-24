@@ -61,10 +61,6 @@ function loadRealAlbums() {
 }
 
 // ═══════════════════════════════════════════════════
-//  LAZY COVER FETCHING (iTunes → Deezer fallback)
-// ═══════════════════════════════════════════════════
-let coverFetchQueue  = [];
-let coverFetchActive = false;
 
 function enqueueCoverFetch() {
   coverFetchQueue = collection.filter(a=>!a.cover).map(a=>a.rank);

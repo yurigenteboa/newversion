@@ -36,6 +36,7 @@
 
   /* ── Turntable mini-player ── */
   const tt = document.getElementById('turntable');
+if (!tt) return;
   const ttCover = document.getElementById('ttCover');
   const ttTitle = document.getElementById('ttTitle');
   const ttArtist = document.getElementById('ttArtist');

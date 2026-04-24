@@ -105,19 +105,6 @@ function toggleFavFilter() {
 //  UTILS
 
 // ═══════════════════════════════════════════════════
-//  THEME
-// ═══════════════════════════════════════════════════
-let currentTheme = localStorage.getItem('theme') || 'light';
-function applyTheme() {
-  document.documentElement.setAttribute('data-theme', currentTheme);
-}
-function toggleTheme() {
-  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('theme', currentTheme);
-  applyTheme();
-  // Re-render all charts so colors match the new theme
-  if (currentPage === 'stats') renderAllCharts();
-}
 applyTheme();
 
 // ═══════════════════════════════════════════════════
