@@ -2861,10 +2861,23 @@ body::after{
   .kbd-hint{ display: none; }
   .genre-strip{ height: 36px; }
   .genre-strip-item{ font-size: 16px; }
-  .modal-hero{ flex-direction: column; padding: 24px !important; }
-  .modal-vinyl-rig{ width: 180px; height: 180px; }
-  .modal-vinyl-rig .mv-disc{ width: 180px; height: 180px; left: 22%; }
-  .modal-vinyl-rig .mv-sleeve{ width: 180px; height: 180px; }
-  .modal-vinyl-rig .mv-spindle{ left: calc(22% + 90px); top: 90px; }
+  .modal-hero{ flex-direction: column; padding: 24px !important; height: auto !important; min-height: 340px !important; }
+  .modal-hero-content{
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+    height: auto !important;
+    padding: 22px 20px 20px !important;
+    gap: 16px !important;
+  }
+  .modal-vinyl-rig{ width: 200px; height: 150px; }
+  .modal-vinyl-rig .mv-disc{ width: 150px; height: 150px; left: 32%; top: 0; }
+  .modal-vinyl-rig .mv-sleeve{ width: 150px; height: 150px; left: 0; top: 0; }
+  .modal-vinyl-rig .mv-spindle{ left: calc(32% + 75px); top: 75px; }
+  .modal-vinyl-rig .mv-hint{ display: none; }
+  .modal-title-group{ width: 100%; min-width: 0; }
+  .modal-album-title{ font-size: 22px !important; line-height: 1.15; word-wrap: break-word; }
+  .modal-album-artist{ font-size: 13px; }
+  .modal-tags{ justify-content: center; }
 }
 
