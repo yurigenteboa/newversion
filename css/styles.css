@@ -2690,7 +2690,7 @@ body::after{
   height: 280px !important;
   min-height: unset !important;
   max-height: unset !important;
-  overflow: visible;
+  overflow: hidden;
   position: relative;
 }
 .modal-hero-bg{ filter: blur(46px) saturate(1.65) brightness(.42) !important; }
@@ -2715,13 +2715,13 @@ body::after{
 .modal-vinyl-rig{
   position: relative;
   flex-shrink: 0;
-  width: 220px; height: 220px;
+  width: 200px; height: 200px;
   perspective: 1600px;
 }
 .modal-vinyl-rig .mv-disc{
   position: absolute;
   left: 28%; top: 0;
-  width: 220px; height: 220px;
+  width: 200px; height: 200px;
   border-radius: 50%;
   background:
     radial-gradient(circle at 50% 50%,
@@ -2772,7 +2772,7 @@ body::after{
 .modal-vinyl-rig .mv-sleeve{
   position: absolute;
   left: 0; top: 0;
-  width: 220px; height: 220px;
+  width: 200px; height: 200px;
   z-index: 2;
   box-shadow:
     0 3px 4px rgba(0,0,0,0.5),
