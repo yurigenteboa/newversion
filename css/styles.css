@@ -2714,7 +2714,10 @@ body::after{
   height: 280px !important;
   box-sizing: border-box !important;
 }
-.modal-hero > *{ position: relative; z-index: 2; }
+/* Mantém o bg-blur como absolute (a regra antiga `.modal-hero > *` o empurrava
+   para o fluxo e escondia o conteúdo). Só o content precisa ficar acima. */
+.modal-hero > .modal-hero-bg{ position: absolute !important; inset: -20px !important; z-index: 0 !important; }
+.modal-hero > .modal-hero-content{ position: relative; z-index: 3; }
 .modal-vinyl-rig{
   position: relative;
   flex-shrink: 0;
