@@ -2721,7 +2721,9 @@ body::after{
 .modal-vinyl-rig{
   position: relative;
   flex-shrink: 0;
-  width: 200px; height: 200px;
+  /* disc sai em left:28% (=56px) + 200px, então precisamos reservar ~260px
+     no flex pra não sobrepor o título. */
+  width: 260px; height: 200px;
   perspective: 1600px;
 }
 .modal-vinyl-rig .mv-disc{
@@ -2861,8 +2863,8 @@ body::after{
   .genre-strip-item{ font-size: 16px; }
   .modal-hero{ flex-direction: column; padding: 24px !important; }
   .modal-vinyl-rig{ width: 180px; height: 180px; }
-  .modal-vinyl-rig .mv-disc{ width: 180px; height: 180px; }
+  .modal-vinyl-rig .mv-disc{ width: 180px; height: 180px; left: 22%; }
   .modal-vinyl-rig .mv-sleeve{ width: 180px; height: 180px; }
-  .modal-vinyl-rig .mv-spindle{ left: calc(28% + 90px); top: 90px; }
+  .modal-vinyl-rig .mv-spindle{ left: calc(22% + 90px); top: 90px; }
 }
 
