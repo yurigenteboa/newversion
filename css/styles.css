@@ -2706,10 +2706,13 @@ body::after{
 .modal-hero-content{
   position: relative;
   z-index: 3;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
   padding: 24px 32px !important;
   gap: 28px !important;
-  align-items: flex-end !important;
-  min-height: unset !important;
+  height: 280px !important;
+  box-sizing: border-box !important;
 }
 .modal-hero > *{ position: relative; z-index: 2; }
 .modal-vinyl-rig{
