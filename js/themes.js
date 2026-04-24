@@ -44,6 +44,6 @@
 
   apply();
   // Show FAB
-  setTimeout(()=>{ document.getElementById('tweaksFab').style.display=''; }, 400);
+  setTimeout(()=>{ const fab=document.getElementById('tweaksFab'); if(fab) fab.style.display=''; }, 400);
 })();
 
