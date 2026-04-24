@@ -2688,8 +2688,8 @@ body::after{
 /* ── IMMERSIVE MODAL (vinyl beside cover, big art) ── */
 .modal-hero{
   height: auto !important;
-  min-height: 220px;
-  max-height: 320px;
+  min-height: unset !important;
+  max-height: unset !important;
   overflow: hidden;
   position: relative;
 }
