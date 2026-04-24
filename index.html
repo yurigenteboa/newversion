@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meus 1000 Álbuns Favoritos de Todos os Tempos</title>
+
+  <!-- ── Fontes ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+
+  <!-- ── CSS externo ── -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.1/dist/css/jsvectormap.min.css"/>
+
+  <!-- ── Estilos do projeto (separados em arquivos) ── -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- ── Chart.js (carregado no head pois é dependência crítica) ── -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ══════════ TOPNAV ══════════ -->
+<header class="topnav">
+  <div class="topnav-inner">
+    <button id="backBtn" onclick="goBack()" title="Voltar" style="display:none;align-items:center;gap:4px;background:none;border:none;color:var(--text2);cursor:pointer;font-size:13px;padding:4px 8px;border-radius:3px;transition:color 0.15s;" onmouseenter="this.style.color='var(--text)'" onmouseleave="this.style.color='var(--text2)'">← Voltar</button>
+    <div class="topnav-logo" onclick="navigate('collection')">
+      <span class="logo-main">1000</span>
+      <span class="logo-sub">Álbuns</span>
+    </div>
+    <nav class="topnav-nav">
+      <a class="nav-link active" data-page="collection" onclick="navigate('collection')">Coleção</a>
+      <a class="nav-link" data-page="artists" onclick="navigate('artists')">Bandas</a>
+      <a class="nav-link" data-page="map" onclick="navigate('map')">Mapa</a>
+      <a class="nav-link" data-page="stats" onclick="navigate('stats')">Estatísticas</a>
+      <a class="nav-link" data-page="about" onclick="navigate('about')">Sobre</a>
+      <a class="nav-link" data-page="vinyl" onclick="navigate('vinyl')">Vinil</a>
+      <a class="nav-link" data-page="friends" onclick="navigate('friends')">Meus Amigos</a>
+      <a class="nav-link" data-page="recs" onclick="navigate('recs')">Recomendações</a>
+      <a class="nav-link" data-page="quiz" onclick="navigate('quiz')">Quiz</a>
+      <a class="nav-link" data-page="timeline" onclick="navigate('timeline')">Timeline</a>
+      <a class="nav-link" data-page="shows" onclick="navigate('shows')">Shows</a>
+      <a class="nav-link" data-page="lastfm" onclick="navigate('lastfm')">Mais Ouvidos</a>
+    </nav>
+    <div class="topnav-right">
+      <div class="search-wrap">
+        <span class="search-icon">🔎</span>
+        <input type="text" id="searchInput" placeholder="Buscar álbum, artista..." />
+        <div id="searchSuggestions"></div>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="viewGrid"    title="Grade normal" onclick="setView('grid')">⊞</button>
+        <button class="view-btn"        id="viewCompact" title="Grade compacta" onclick="setView('compact')">⊟</button>
+        <button class="view-btn"        id="viewList"    title="Lista" onclick="setView('list')">≡</button>
+      </div>
+      <button class="view-btn" id="themeBtn" title="Alternar tema" onclick="toggleTheme()" style="border-color:rgba(255,255,255,0.15);font-size:16px">
+        <span class="theme-btn-icon-dark">☀</span>
+        <span class="theme-btn-icon-light">🌙</span>
+      </button>
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ MOBILE NAV ══════════ -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <a class="mobile-nav-link active" data-page="collection" onclick="mobileNavigate('collection')">
+    <span class="nav-dot"></span>Coleção
+  </a>
+  <a class="mobile-nav-link" data-page="artists" onclick="mobileNavigate('artists')">
+    <span class="nav-dot"></span>Bandas
+  </a>
+  <a class="mobile-nav-link" data-page="map" onclick="mobileNavigate('map')">
+    <span class="nav-dot"></span>Mapa da Coleção
+  </a>
+  <a class="mobile-nav-link" data-page="stats" onclick="mobileNavigate('stats')">
+    <span class="nav-dot"></span>Estatísticas
+  </a>
+  <a class="mobile-nav-link" data-page="about" onclick="mobileNavigate('about')">
+    <span class="nav-dot"></span>Sobre
+  </a>
+  <a class="mobile-nav-link" data-page="vinyl" onclick="mobileNavigate('vinyl')">
+    <span class="nav-dot"></span>Vinil
+  </a>
+  <a class="mobile-nav-link" data-page="friends" onclick="mobileNavigate('friends')">
+    <span class="nav-dot"></span>Meus Amigos
+  </a>
+  <a class="mobile-nav-link" data-page="recs" onclick="mobileNavigate('recs')">
+    <span class="nav-dot"></span>Recomendações
+  </a>
+  <a class="mobile-nav-link" data-page="quiz" onclick="mobileNavigate('quiz')">
+    <span class="nav-dot"></span>Quiz
+  </a>
+  <a class="mobile-nav-link" data-page="timeline" onclick="mobileNavigate('timeline')">
+    <span class="nav-dot"></span>Timeline
+  </a>
+  <a class="mobile-nav-link" data-page="shows" onclick="mobileNavigate('shows')">🎤 Shows</a>
+  <a class="mobile-nav-link" data-page="lastfm" onclick="mobileNavigate('lastfm')">🎧 Mais Ouvidos</a>
+  <div class="mobile-nav-search">
+    <input type="text" id="mobileSearchInput" placeholder="🔎 Buscar álbum, artista..." />
+  </div>
+  <div style="padding:12px 24px 14px;border-top:1px solid var(--border)">
+    <button onclick="toggleTheme();closeMobileNav()" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--card-radius);padding:10px 18px;font-size:13px;font-family:inherit;color:var(--text);cursor:pointer;width:100%;text-align:left;font-weight:600">
+      <span class="theme-btn-icon-dark">☀ Modo Claro</span>
+      <span class="theme-btn-icon-light">🌙 Modo Escuro</span>
+    </button>
+  </div>
+  <div style="padding:4px 24px 18px;border-top:1px solid var(--border)">
+    <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--muted2);margin:12px 0 10px">Redes Sociais</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="https://x.com/yurigenteboa" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);text-decoration:none">
+        <img src="https://cdn.simpleicons.org/x/888888" width="12" height="12" alt="" onerror="this.style.display='none'"> X
+      </a>
+      <a href="https://www.instagram.com/y0re/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);text-decoration:none">
+        <img src="https://cdn.simpleicons.org/instagram/888888" width="12" height="12" alt="" onerror="this.style.display='none'"> Instagram
+      </a>
+      <a href="https://letterboxd.com/ymrs/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);text-decoration:none">
+        <img src="https://cdn.simpleicons.org/letterboxd/888888" width="12" height="12" alt="" onerror="this.style.display='none'"> Letterboxd
+      </a>
+      <a href="https://www.last.fm/user/y0re" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);text-decoration:none">
+        <img src="https://cdn.simpleicons.org/lastdotfm/888888" width="12" height="12" alt="" onerror="this.style.display='none'"> Last.fm
+      </a>
+      <a href="https://rateyourmusic.com/~yore" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);text-decoration:none">
+        <img src="https://cdn.simpleicons.org/sonemic/888888" width="12" height="12" alt="" onerror="this.style.display='none'"> RYM
+      </a>
+      <a href="https://www.discogs.com/pt_BR/user/yurigenteboa" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);text-decoration:none">
+        <img src="https://cdn.simpleicons.org/discogs/888888" width="12" height="12" alt="" onerror="this.style.display='none'"> Discogs
+      </a>
+      <a href="https://open.spotify.com/user/yurimongoloide" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);text-decoration:none">
+        <img src="https://cdn.simpleicons.org/spotify/888888" width="12" height="12" alt="" onerror="this.style.display='none'"> Spotify
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ FILTER STRIP ══════════ -->
+<div class="filter-strip">
+  <!-- Linha 1: Sort pills -->
+  <div class="sort-zone">
+    <div class="sort-zone-inner" id="sortZone">
+      <!-- preenchido por renderSortPills() -->
+    </div>
+  </div>
+  <!-- Linha 2: Filter pills -->
+  <div class="filter-zone">
+    <div class="filter-zone-inner">
+      <button class="fpill" id="fpillGenre"   onclick="toggleFPanel('fpanel-genre',this)">
+        <span id="fpill-genre-lbl">Gênero</span><span class="fpill-arr">▾</span>
+      </button>
+      <button class="fpill" id="fpillCountry" onclick="toggleFPanel('fpanel-country',this)">
+        <span id="fpill-country-lbl">País</span><span class="fpill-arr">▾</span>
+      </button>
+      <button class="fpill" id="fpillDecade"  onclick="toggleFPanel('fpanel-decade',this)">
+        <span id="fpill-decade-lbl">Década</span><span class="fpill-arr">▾</span>
+      </button>
+      <button class="fpill" id="fpillYear"    onclick="toggleFPanel('fpanel-year',this)">
+        <span id="fpill-year-lbl">Ano</span><span class="fpill-arr">▾</span>
+      </button>
+      <button class="fpill" id="favPill" onclick="toggleFavFilter()" title="Mostrar apenas favoritos">❤ Favoritos</button>
+      <button class="fpill-clear" id="fpillClear" onclick="clearAllFilters()" style="display:none">✕ Limpar</button>
+      <button onclick="openRandomAlbum()" title="Abrir álbum aleatório" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;font-size:13px;transition:all var(--transition)" onmouseenter="this.style.color='var(--text)'" onmouseleave="this.style.color='var(--muted)'">🎲 Aleatório</button>
+    </div>
+  </div>
+</div>
+
+<!-- Filter panels (fixed, position via JS) -->
+<div class="fpanel" id="fpanel-genre">
+  <div class="fpanel-search"><input type="text" placeholder="Buscar gênero…" oninput="searchFPanel(this,'fpanel-genre')"></div>
+  <div class="fpanel-list" id="fpanel-genre-list"></div>
+</div>
+<div class="fpanel" id="fpanel-country">
+  <div class="fpanel-search"><input type="text" placeholder="Buscar país…" oninput="searchFPanel(this,'fpanel-country')"></div>
+  <div class="fpanel-list" id="fpanel-country-list"></div>
+</div>
+<div class="fpanel" id="fpanel-decade">
+  <div class="fpanel-list" id="fpanel-decade-list"></div>
+</div>
+<div class="fpanel" id="fpanel-year">
+  <div class="fpanel-search"><input type="text" placeholder="Buscar ano…" oninput="searchFPanel(this,'fpanel-year')"></div>
+  <div class="fpanel-list" id="fpanel-year-list"></div>
+</div>
+
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<main class="main-content">
+
+  <!-- ── COLEÇÃO ── -->
+  <div class="page active" id="page-collection">
+
+    <div class="editorial-header">
+      <div>
+        <div class="editorial-eyebrow">Lista Definitiva</div>
+        <h1 class="editorial-title">Meus <em>1000 Álbuns<br>Favoritos</em> de Todos os Tempos</h1>
+        <p class="editorial-sub">Uma curadoria pessoal dos maiores discos já gravados — do rock progressivo ao hip-hop, do jazz ao eletrônico.</p>
+        <div class="editorial-stats" id="header-stats"></div>
+      </div>
+      <div class="editorial-count">
+        <span class="count-num" id="heroCount">0</span>
+        <span class="count-label">álbuns</span>
+      </div>
+    </div>
+
+    <!-- Genre marquee strip -->
+    <div class="genre-strip" id="genreStrip">
+      <div class="genre-strip-track" id="genreStripTrack"></div>
+    </div>
+
+    <!-- Exploration rows (non-spoiler teasers) -->
+    <div id="carouselsWrap"></div>
+
+    <div class="results-bar">
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+
+    <div id="albumGrid"></div>
+    <div id="paginationBar"></div>
+
+    <div class="empty" id="emptyState" style="display:none">
+      <div class="empty-icon">💿</div>
+      <h3>Nenhum álbum encontrado</h3>
+      <p>Tente ajustar os filtros ou o termo de busca.</p>
+    </div>
+  </div>
+
+  <!-- ── BANDAS / ARTISTAS ── -->
+  <div class="page" id="page-artists">
+    <div class="editorial-header">
+      <div>
+        <div class="editorial-eyebrow">Discoteca</div>
+        <h1 style="font-family:'Inter',-apple-system,sans-serif;font-size:42px;font-weight:900;letter-spacing:-2.5px;line-height:1.05;margin-bottom:10px;color:var(--text)">
+          Bandas <span style="color:var(--accent)">&</span> Artistas
+        </h1>
+        <p class="editorial-sub">Explore os artistas da coleção — biografia, discografia e curiosidades.</p>
+      </div>
+      <div class="editorial-count">
+        <span class="count-num" id="artistsHeroCount">0</span>
+        <span class="count-label">artistas</span>
+      </div>
+    </div>
+    <div class="artists-header-bar">
+      <div class="artists-search-wrap">
+        <span class="artists-search-icon">🔎</span>
+        <input type="text" id="artistsSearchInput" placeholder="Buscar artista ou banda..." oninput="onArtistsSearch(this.value)" />
+      </div>
+      <select class="artists-sort-sel" id="artistsSortSel" onchange="currentArtistPage=1;renderArtistsPage()">
+        <option value="name">A → Z</option>
+        <option value="count">Mais álbuns</option>
+        <option value="rank">Melhor rank</option>
+      </select>
+      <span class="artists-count-label" id="artistsCountLabel"></span>
+    </div>
+    <div class="artist-grid" id="artistGrid"></div>
+    <div id="artistPaginationBar"></div>
+  </div>
+
+  <!-- ── MAPA MUNDIAL ── -->
+  <div class="page" id="page-map">
+    <div class="page-header">
+      <div class="page-header-eyebrow">Explorar</div>
+      <h2 class="page-header-title">Mapa da Coleção</h2>
+    </div>
+
+    <div class="country-top-bar" id="countryTopBar"></div>
+
+    <div class="map-layout">
+      <div class="map-container">
+        <div id="world-map"></div>
+      </div>
+      <div class="country-side-panel" id="countrySidePanel">
+        <div class="country-side-header">
+          <span class="country-side-flag" id="countrySideFlag">🌍</span>
+          <div>
+            <div class="country-side-name" id="countrySideName">Selecione um país</div>
+            <div class="country-side-count" id="countrySideCount">Clique no mapa ou nas bandeiras acima</div>
+          </div>
+        </div>
+        <div class="country-side-empty" id="countrySideEmpty">Clique em um país para ver os álbuns.</div>
+        <div class="country-album-list" id="countryAlbumList" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ESTATÍSTICAS ── -->
+  <div class="page" id="page-stats">
+    <div class="page-header">
+      <div class="page-header-eyebrow">Análise</div>
+      <h2 class="page-header-title">Estatísticas da Coleção</h2>
+    </div>
+    <div class="stats-grid" id="statsCards"></div>
+
+    <div class="section-heading"><h3 class="section-title">Álbuns por Ano</h3></div>
+    <div class="year-chart-wrap"><canvas id="yearChart"></canvas></div>
+
+    <div class="section-heading"><h3 class="section-title">Top 15 Artistas</h3></div>
+    <div class="chart-wrap-surface"><div class="chart-inner-tall"><canvas id="artistChart"></canvas></div></div>
+
+    <div class="charts-2col">
+      <div>
+        <div class="section-heading"><h3 class="section-title">Gêneros</h3></div>
+        <div class="chart-wrap-surface"><div class="chart-inner-medium"><canvas id="genreDonutChart"></canvas></div></div>
+      </div>
+      <div>
+        <div class="section-heading"><h3 class="section-title">Top 10 Países</h3></div>
+        <div class="chart-wrap-surface"><div class="chart-inner-medium"><canvas id="countryChart"></canvas></div></div>
+      </div>
+    </div>
+
+    <div class="section-heading"><h3 class="section-title">Gêneros por Década</h3></div>
+    <div class="chart-wrap-surface"><div class="chart-inner-medium"><canvas id="decadeGenreChart"></canvas></div></div>
+
+    <div class="section-heading"><h3 class="section-title">Distribuição por Gênero</h3></div>
+    <div class="genre-bars-wrap"><div class="genre-bars" id="genreBars"></div></div>
+    <div class="section-heading"><h3 class="section-title">Distribuição por Década</h3></div>
+    <div class="decade-grid" id="decadeGrid"></div>
+  </div>
+
+  <!-- ── SOBRE ── -->
+  <div class="page" id="page-about">
+    <div class="about-hero">
+      <div class="about-avatar">
+        <img src="profile.jpg" alt="Yuri" onerror="this.style.display='none';this.parentElement.insertAdjacentText('beforeend','🎵')">
+      </div>
+      <div class="about-hero-text">
+        <h1 class="about-name">Yuri</h1>
+        <p class="about-handle"><a href="https://x.com/yurigenteboa" target="_blank">@yurigenteboa</a> · <a href="https://www.instagram.com/y0re/" target="_blank">@y0re</a> · <a href="https://letterboxd.com/ymrs/" target="_blank">@ymrs</a></p>
+        <p class="about-bio">
+          Apaixonado por música desde sempre, construí esta lista com os 1000 álbuns que mais me marcaram — do rock progressivo ao hip-hop, do jazz ao eletrônico, do samba ao metal. Cada disco aqui carrega uma história, uma fase da vida, uma descoberta. Além disso, coleciono discos :)        </p>
+        <div class="about-socials">
+          <a href="https://x.com/yurigenteboa" target="_blank" class="about-social-btn">
+            <img src="https://cdn.simpleicons.org/x/888888" width="13" height="13" alt="" onerror="this.style.display='none'"> X
+          </a>
+          <a href="https://www.instagram.com/y0re/" target="_blank" class="about-social-btn">
+            <img src="https://cdn.simpleicons.org/instagram/888888" width="13" height="13" alt="" onerror="this.style.display='none'"> Instagram
+          </a>
+          <a href="https://letterboxd.com/ymrs/" target="_blank" class="about-social-btn">
+            <img src="https://cdn.simpleicons.org/letterboxd/888888" width="13" height="13" alt="" onerror="this.style.display='none'"> Letterboxd
+          </a>
+          <a href="https://www.last.fm/user/y0re" target="_blank" class="about-social-btn">
+            <img src="https://cdn.simpleicons.org/lastdotfm/888888" width="13" height="13" alt="" onerror="this.style.display='none'"> Last.fm
+          </a>
+          <a href="https://rateyourmusic.com/~yore" target="_blank" class="about-social-btn">
+            <img src="https://cdn.simpleicons.org/sonemic/888888" width="13" height="13" alt="" onerror="this.style.display='none'"> RateYourMusic
+          </a>
+          <a href="https://www.discogs.com/pt_BR/user/yurigenteboa" target="_blank" class="about-social-btn">
+            <img src="https://cdn.simpleicons.org/discogs/888888" width="13" height="13" alt="" onerror="this.style.display='none'"> Discogs
+          </a>
+          <a href="https://open.spotify.com/user/yurimongoloide" target="_blank" class="about-social-btn">
+            <img src="https://cdn.simpleicons.org/spotify/888888" width="13" height="13" alt="" onerror="this.style.display='none'"> Spotify
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats dinâmicas da coleção -->
+    <div class="about-stats-grid" id="aboutStatsGrid"></div>
+
+    <!-- Top 10 favoritos -->
+    <h2 class="about-section-title">Meu Top 10</h2>
+    <div class="about-fav-grid" id="aboutTop10Grid"></div>
+
+    <!-- Gêneros favoritos -->
+    <h2 class="about-section-title">Gêneros favoritos</h2>
+    <div class="genre-bars-wrap" style="margin-bottom:36px"><div class="genre-bars" id="aboutGenreBars"></div></div>
+
+    <!-- Países favoritos -->
+    <h2 class="about-section-title">Países na coleção</h2>
+    <div class="country-top-bar" id="aboutCountryBar" style="margin-bottom:36px"></div>
+  </div>
+
+  <!-- ── VINIL / DISCOGS ── -->
+  <div class="page" id="page-vinyl">
+    <div class="vinyl-page-header">
+      <div>
+        <div class="page-header-eyebrow">Coleção Física</div>
+        <h2 class="page-header-title">Minha Coleção de Discos</h2>
+        <p style="font-size:13px;color:var(--muted);margin-top:6px">Coleção no Discogs — vinis, CDs e mais</p>
+      </div>
+      <div class="vinyl-header-right">
+        <span class="vinyl-total-badge" id="vinylTotalBadge">—</span>
+        <a href="https://www.discogs.com/pt_BR/user/yurigenteboa/collection" target="_blank" rel="noopener" class="vinyl-discogs-link">
+          <img src="https://cdn.simpleicons.org/discogs/888888" width="14" height="14" alt="" onerror="this.style.display='none'"> Ver no Discogs
+        </a>
+      </div>
+    </div>
+    <div class="vinyl-filters">
+      <div class="vinyl-search-wrap">
+        <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted);pointer-events:none">🔎</span>
+        <input type="text" id="vinylSearch" placeholder="Buscar na coleção..." oninput="filterVinyl(this.value)" />
+      </div>
+      <select id="vinylFormatFilter" onchange="filterVinyl()" class="filter-select">
+        <option value="">Todos os formatos</option>
+        <option value="Vinyl">Vinil</option>
+        <option value="CD">CD</option>
+        <option value="Cassette">Cassette</option>
+      </select>
+      <select id="vinylSortSel" onchange="filterVinyl()" class="filter-select">
+        <option value="added">Adicionado recentemente</option>
+        <option value="title">Título A–Z</option>
+        <option value="artist">Artista A–Z</option>
+        <option value="year">Ano</option>
+      </select>
+    </div>
+    <div class="vinyl-grid" id="vinylGrid">
+      <div class="vinyl-loading" id="vinylLoading">
+        <div class="spinner"></div> Carregando coleção do Discogs…
+      </div>
+    </div>
+    <div id="vinylPagBar"></div>
+  </div>
+
+  <!-- ── AMIGOS ── -->
+  <div class="page" id="page-friends">
+    <div class="page-header">
+      <div class="page-header-eyebrow">Comunidade</div>
+      <h2 class="page-header-title">Meus Amigos Também Curtem Música</h2>
+    </div>
+    <div class="friends-grid" id="friendsGrid"></div>
+  </div>
+
+  <!-- ── MÍDIA / RECOMENDAÇÕES ── -->
+  <div class="page" id="page-recs">
+    <div class="page-header">
+      <div class="page-header-eyebrow">Conteúdo</div>
+      <h2 class="page-header-title">Recomendações de Conteúdo Musical</h2>
+    </div>
+    <div class="recs-grid" id="recsGrid"></div>
+  </div>
+
+  <!-- ── QUIZ ── -->
+  <div class="page" id="page-quiz">
+    <div class="container" style="max-width:680px;margin:0 auto;padding:40px 16px">
+      <h2 style="font-size:22px;font-weight:700;margin-bottom:8px">Modo Quiz</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:24px">Adivinhe o álbum pela capa. Quantos você consegue acertar?</p>
+      <div id="quizContent"></div>
+    </div>
+  </div>
+
+  <!-- ── TIMELINE ── -->
+  <div class="page" id="page-timeline">
+    <div style="padding:32px 16px 16px">
+      <h2 style="font-size:22px;font-weight:700;margin-bottom:4px">Timeline da Coleção</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:24px">Álbuns organizados por ano de lançamento</p>
+    </div>
+    <div id="timelineContent" style="padding:0 16px 40px"></div>
+  </div>
+
+<div class="page" id="page-shows">
+  <div style="padding:32px 16px 0">
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:4px">Shows que Fui 🎤</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:0">Histórico completo de shows e festivais</p>
+  </div>
+  <div class="shows-stats-bar" id="showsStatBar"></div>
+  <div class="shows-filter-bar">
+    <input type="text" id="showsSearch" placeholder="Buscar artista ou local..." style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:7px 12px;border-radius:4px;font-size:13px;width:220px" oninput="renderShows()">
+    <select id="showsYear" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:7px 12px;border-radius:4px;font-size:13px" onchange="renderShows()"><option value="">Todos os anos</option></select>
+    <select id="showsRating" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:7px 12px;border-radius:4px;font-size:13px" onchange="renderShows()">
+      <option value="">Todas as notas</option>
+      <option value="5">★★★★★ 5 estrelas</option>
+      <option value="4">★★★★☆ 4+</option>
+      <option value="3">★★★☆☆ 3+</option>
+    </select>
+  </div>
+  <div id="showsContent" style="padding-bottom:40px"></div>
+</div>
+
+<div class="page" id="page-lastfm">
+  <div style="padding:32px 16px 0">
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:4px">Mais Ouvidos 🎧</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:0">Estatísticas do Last.fm — <a href="https://www.last.fm/user/y0re" target="_blank" style="color:var(--accent)">y0re</a></p>
+  </div>
+  <div id="lfmProfileBar"></div>
+  <div class="lfm-period-bar">
+    <button class="lfm-pill active" onclick="setLfmPeriod('overall',this)">Geral</button>
+    <button class="lfm-pill" onclick="setLfmPeriod('12month',this)">12 meses</button>
+    <button class="lfm-pill" onclick="setLfmPeriod('6month',this)">6 meses</button>
+    <button class="lfm-pill" onclick="setLfmPeriod('3month',this)">3 meses</button>
+    <button class="lfm-pill" onclick="setLfmPeriod('1month',this)">1 mês</button>
+    <button class="lfm-pill" onclick="setLfmPeriod('7day',this)">7 dias</button>
+  </div>
+  <div class="lfm-tabs">
+    <div class="lfm-tab active" onclick="setLfmTab('artists',this)">Artistas</div>
+    <div class="lfm-tab" onclick="setLfmTab('albums',this)">Álbuns</div>
+    <div class="lfm-tab" onclick="setLfmTab('tracks',this)">Músicas</div>
+  </div>
+  <div id="lfmContent" style="padding-bottom:40px"></div>
+</div>
+
+</main>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-copy">
+      <strong>Meus 1000 Álbuns Favoritos de Todos os Tempos</strong><br>
+      Uma curadoria pessoal por Yuri
+    </p>
+    <div class="footer-social">
+      <a href="https://x.com/yurigenteboa" target="_blank" rel="noopener" class="social-link" title="X (Twitter)">
+        <img src="https://cdn.simpleicons.org/x/888888" width="16" height="16" alt="X" onerror="this.style.display='none'">
+      </a>
+      <a href="https://www.instagram.com/y0re/" target="_blank" rel="noopener" class="social-link" title="Instagram">
+        <img src="https://cdn.simpleicons.org/instagram/888888" width="16" height="16" alt="Instagram" onerror="this.style.display='none'">
+      </a>
+      <a href="https://letterboxd.com/ymrs/" target="_blank" rel="noopener" class="social-link" title="Letterboxd">
+        <img src="https://cdn.simpleicons.org/letterboxd/888888" width="16" height="16" alt="Letterboxd" onerror="this.style.display='none'">
+      </a>
+      <a href="https://www.last.fm/user/y0re" target="_blank" rel="noopener" class="social-link" title="Last.fm">
+        <img src="https://cdn.simpleicons.org/lastdotfm/888888" width="16" height="16" alt="Last.fm" onerror="this.style.display='none'">
+      </a>
+      <a href="https://rateyourmusic.com/~yore" target="_blank" rel="noopener" class="social-link" title="RateYourMusic">
+        <img src="https://cdn.simpleicons.org/sonemic/888888" width="16" height="16" alt="RateYourMusic" onerror="this.style.display='none'">
+      </a>
+      <a href="https://www.discogs.com/pt_BR/user/yurigenteboa" target="_blank" rel="noopener" class="social-link" title="Discogs">
+        <img src="https://cdn.simpleicons.org/discogs/888888" width="16" height="16" alt="Discogs" onerror="this.style.display='none'">
+      </a>
+      <a href="https://open.spotify.com/user/yurimongoloide" target="_blank" rel="noopener" class="social-link" title="Spotify">
+        <img src="https://cdn.simpleicons.org/spotify/888888" width="16" height="16" alt="Spotify" onerror="this.style.display='none'">
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════ ARTIST MODAL ══════════ -->
+<div class="artist-modal-backdrop" id="artistModalBackdrop" onclick="closeArtistOutside(event)">
+  <div class="artist-modal" id="artistModal">
+    <button class="modal-close" onclick="closeArtistModal()">✕</button>
+    <div id="artistModalContent"></div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL FLOAT NAV ══════════ -->
+<div class="modal-float-nav" id="modalFloatNav">
+  <button class="modal-nav-arrow" id="modalPrevBtn" onclick="navigateModal(-1)" disabled>←</button>
+  <span class="modal-nav-pos" id="modalNavPos"></span>
+  <button class="modal-nav-arrow" id="modalNextBtn" onclick="navigateModal(1)">→</button>
+</div>
+
+<!-- ══════════ MODAL ══════════ -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div id="modalContent"></div>
+    <div style="display:flex;align-items:center;padding:8px 28px 10px;border-top:1px solid var(--border)">
+      <span style="font-size:11px;color:var(--muted)">← → navegar · ESC fechar · F favoritar</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOAST ══════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════ SCRIPTS ══════════ -->
+
+<!-- ══════════ SCRIPTS ══════════ -->
+
+<!-- ══════════ TOAST ══════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCRIPTS — Ordem de carregamento importa!
+     Cada arquivo tem uma responsabilidade única.
+═══════════════════════════════════════════════════════ -->
+
+<!-- 1. Dados dos 1000 álbuns -->
+<script src="js/albums_data.js"></script>
+
+<!-- 2. Bibliotecas externas -->
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.1/dist/js/jsvectormap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.1/dist/maps/world.js"></script>
+
+<!-- 3. Estado global e constantes -->
+<script src="js/state.js"></script>
+
+<!-- 4. Utilitários: esc(), toast(), cache de capas, tema -->
+<script src="js/utils.js"></script>
+
+<!-- 5. Navegação entre páginas -->
+<script src="js/nav.js"></script>
+
+<!-- 6. Filtros: gênero, país, ano, década -->
+<script src="js/filters.js"></script>
+
+<!-- 7. Renderização: cards, lista, carrosséis -->
+<script src="js/render.js"></script>
+
+<!-- 8. Modal do álbum: abertura, tracklist, tags -->
+<script src="js/modal.js"></script>
+
+<!-- 9. Busca de capas: iTunes, Deezer, Last.fm -->
+<script src="js/covers.js"></script>
+
+<!-- 10. Gráficos e estatísticas -->
+<script src="js/charts.js"></script>
+
+<!-- 11. Página de artistas -->
+<script src="js/artists.js"></script>
+
+<!-- 12. Demais páginas: mapa, sobre, quiz, vinil, shows, last.fm... -->
+<script src="js/pages.js"></script>
+
+<!-- 13. Inicialização: busca, favoritos, teclado, init -->
+<script src="js/init.js"></script>
+
+<!-- 14. Sistema de temas e personalização visual -->
+<script src="js/themes.js"></script>
+
+<!-- 15. Interações: turntable, atalhos, animações -->
+<script src="js/interactions.js"></script>
+
+</body>
+</html>
