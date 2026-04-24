@@ -2687,11 +2687,13 @@ body::after{
 
 /* ── IMMERSIVE MODAL (vinyl beside cover, big art) ── */
 .modal-hero{
-  height: auto !important;
+  height: 280px !important;
   min-height: unset !important;
   max-height: unset !important;
   overflow: hidden;
   position: relative;
+  display: flex !important;
+  align-items: flex-end !important;
 }
 .modal-hero-bg{ filter: blur(46px) saturate(1.65) brightness(.42) !important; }
 .modal-hero::after{
