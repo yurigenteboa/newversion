@@ -2690,7 +2690,7 @@ body::after{
   height: 280px !important;
   min-height: unset !important;
   max-height: unset !important;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 .modal-hero-bg{ filter: blur(46px) saturate(1.65) brightness(.42) !important; }
@@ -2705,16 +2705,11 @@ body::after{
 }
 .modal-hero-content{
   position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
+  z-index: 3;
   padding: 24px 32px !important;
   gap: 28px !important;
-  height: 280px;
-  box-sizing: border-box;
+  align-items: flex-end !important;
   min-height: unset !important;
-  max-height: unset !important;
 }
 .modal-hero > *{ position: relative; z-index: 2; }
 .modal-vinyl-rig{
