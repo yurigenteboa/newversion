@@ -1242,25 +1242,53 @@ body::before{
 [data-theme="light"] .topnav{ background: rgba(244,239,228,0.88); }
 
 .topnav-inner{ height: 64px; max-width: 1540px; padding: 0 36px; }
+/* Logo editorial — inspiração Pitchfork/Tidal:
+   wordmark "1000" extra-pesado e condensado + tagline mono sublinhada */
 .topnav-logo{
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 10px;
   padding-right: 22px;
   border-right: 1px solid var(--border-neutral);
-  gap: 2px;
+  cursor: pointer;
+  position: relative;
 }
 .logo-main{
-  font-family: var(--font-serif);
-  font-weight: 400; font-style: italic;
-  font-size: 26px; letter-spacing: -0.5px;
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-style: normal;
+  font-size: 30px;
+  letter-spacing: -2.2px;
+  line-height: 0.95;
   color: var(--text);
-  background: linear-gradient(180deg, var(--accent-hot) 0%, var(--accent) 60%, var(--accent-deep) 100%);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: currentColor;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  font-variant-numeric: lining-nums;
+  font-stretch: condensed;
+  /* barra vermelha/accent por baixo do "1000" à la Pitchfork */
+  padding-bottom: 2px;
+  border-bottom: 3px solid var(--accent);
 }
 .logo-sub{
   font-family: var(--font-mono);
-  font-size: 9px; font-weight: 500;
-  letter-spacing: 2.4px; color: var(--muted);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 2.8px;
+  color: var(--muted);
   text-transform: uppercase;
+  transform: translateY(-4px);
+}
+.topnav-logo:hover .logo-main{
+  color: var(--accent);
+  transition: color .2s ease;
+}
+[data-theme="light"] .logo-main{
+  color: #0e0c0a;
+  -webkit-text-fill-color: currentColor;
+  background: none;
+  border-bottom-color: var(--accent);
 }
 .nav-link{
   font-family: var(--font-sans);
@@ -2274,9 +2302,7 @@ body::before{
 [data-theme="light"] .modal{ background: var(--bg-elev); }
 [data-theme="light"] .modal-backdrop{ background: rgba(40,30,15,0.55); }
 [data-theme="light"] .logo-main{
-  background: linear-gradient(180deg, var(--accent-hot) 0%, var(--accent) 60%, var(--accent-deep) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #0e0c0a;
 }
 [data-theme="light"] .site-footer{ background: var(--bg-elev); }
 [data-theme="light"] .toast{ background: var(--surface); color: var(--text); }
