@@ -1,4 +1,12 @@
 // ═══════════════════════════════════════════════════
+function debounce(fn, ms = 200) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
 function esc(s)  { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function esc2(s) { return String(s||'').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
 function fmtMs(ms) {

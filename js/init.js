@@ -9,11 +9,14 @@ function toggleMobileNav() {
   nav.classList.toggle('open', !isOpen);
   overlay.classList.toggle('open', !isOpen);
   btn.textContent = isOpen ? '☰' : '✕';
+  btn.setAttribute('aria-expanded', String(!isOpen));
 }
 function closeMobileNav() {
   document.getElementById('mobileNav').classList.remove('open');
   document.getElementById('mobileNavOverlay').classList.remove('open');
-  document.getElementById('hamburgerBtn').textContent = '☰';
+  const btn = document.getElementById('hamburgerBtn');
+  btn.textContent = '☰';
+  btn.setAttribute('aria-expanded', 'false');
 }
 function mobileNavigate(page) {
   closeMobileNav();
@@ -66,13 +69,13 @@ function applySuggestion(artist, title) {
   renderCollection();
 }
 
-document.getElementById('searchInput').addEventListener('input', function() {
+document.getElementById('searchInput').addEventListener('input', debounce(function() {
   searchQuery = this.value; currentAlbumPage = 1;
   const mob = document.getElementById('mobileSearchInput');
   if (mob) mob.value = this.value;
   showSuggestions(this.value.trim());
   if (currentPage==='collection') renderCollection();
-});
+}, 200));
 
 document.getElementById('searchInput').addEventListener('keydown', function(e) {
   const items = suggBox.querySelectorAll('.sugg-item');
@@ -85,11 +88,11 @@ document.getElementById('searchInput').addEventListener('keydown', function(e) {
 
 document.addEventListener('click', function(e) { if (!e.target.closest('.search-wrap')) suggBox.classList.remove('open'); });
 
-document.getElementById('mobileSearchInput').addEventListener('input', function() {
+document.getElementById('mobileSearchInput').addEventListener('input', debounce(function() {
   searchQuery = this.value; currentAlbumPage = 1;
   document.getElementById('searchInput').value = this.value;
   if (currentPage==='collection') renderCollection();
-});
+}, 200));
 
 // ═══════════════════════════════════════════════════
 //  FAVORITES FILTER

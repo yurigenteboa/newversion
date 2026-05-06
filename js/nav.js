@@ -1,6 +1,21 @@
 // ═══════════════════════════════════════════════════
 //  NAVIGATION
 // ═══════════════════════════════════════════════════
+const PAGE_TITLES = {
+  collection: 'Meus 1000 Álbuns Favoritos de Todos os Tempos',
+  artists:    'Bandas & Artistas | 1000 Álbuns',
+  map:        'Mapa da Coleção | 1000 Álbuns',
+  stats:      'Estatísticas | 1000 Álbuns',
+  about:      'Sobre | 1000 Álbuns',
+  vinyl:      'Minha Coleção de Discos | 1000 Álbuns',
+  friends:    'Meus Amigos | 1000 Álbuns',
+  recs:       'Recomendações | 1000 Álbuns',
+  quiz:       'Quiz | 1000 Álbuns',
+  timeline:   'Timeline | 1000 Álbuns',
+  shows:      'Shows | 1000 Álbuns',
+  lastfm:     'Mais Ouvidos | 1000 Álbuns',
+};
+
 function navigate(page) {
   // Push history
   if (navHistory.length === 0 || navHistory[navHistory.length-1] !== currentPage) {
@@ -8,10 +23,17 @@ function navigate(page) {
   }
   currentPage = page;
   history.replaceState(null, '', '#/pagina/' + page);
+  document.title = PAGE_TITLES[page] || PAGE_TITLES.collection;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page)?.classList.add('active');
-  document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(n => n.classList.remove('active'));
-  document.querySelectorAll(`.nav-link[data-page="${page}"], .mobile-nav-link[data-page="${page}"]`).forEach(n => n.classList.add('active'));
+  document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(n => {
+    n.classList.remove('active');
+    n.removeAttribute('aria-current');
+  });
+  document.querySelectorAll(`.nav-link[data-page="${page}"], .mobile-nav-link[data-page="${page}"]`).forEach(n => {
+    n.classList.add('active');
+    n.setAttribute('aria-current', 'page');
+  });
   if (page === 'stats')    renderStats();
   if (page === 'map')      renderMapPage();
   if (page === 'artists')  renderArtistsPage();
@@ -30,10 +52,17 @@ function goBack() {
   if (!navHistory.length) return;
   const prev = navHistory.pop();
   currentPage = prev;
+  document.title = PAGE_TITLES[prev] || PAGE_TITLES.collection;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + prev)?.classList.add('active');
-  document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(n => n.classList.remove('active'));
-  document.querySelectorAll(`.nav-link[data-page="${prev}"], .mobile-nav-link[data-page="${prev}"]`).forEach(n => n.classList.add('active'));
+  document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(n => {
+    n.classList.remove('active');
+    n.removeAttribute('aria-current');
+  });
+  document.querySelectorAll(`.nav-link[data-page="${prev}"], .mobile-nav-link[data-page="${prev}"]`).forEach(n => {
+    n.classList.add('active');
+    n.setAttribute('aria-current', 'page');
+  });
   if (prev === 'stats')    renderStats();
   if (prev === 'map')      renderMapPage();
   if (prev === 'artists')  renderArtistsPage();
