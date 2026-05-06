@@ -5,6 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meus 1000 Álbuns Favoritos de Todos os Tempos</title>
 
+  <!-- ── SEO Básico ── -->
+  <meta name="description" content="Curadoria pessoal dos 1000 álbuns favoritos de todos os tempos — do rock progressivo ao hip-hop, do jazz ao eletrônico. Explore com estatísticas, mapa e filtros." />
+  <meta name="author" content="Yuri" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yurigenteboa.github.io/topalbums/" />
+
+  <!-- ── Open Graph (Facebook, WhatsApp, LinkedIn) ── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Meus 1000 Álbuns Favoritos de Todos os Tempos" />
+  <meta property="og:description" content="Curadoria pessoal de 1000 álbuns — rock, jazz, hip-hop, eletrônico e muito mais. Com estatísticas, mapa e filtros." />
+  <meta property="og:url" content="https://yurigenteboa.github.io/topalbums/" />
+  <meta property="og:image" content="https://yurigenteboa.github.io/topalbums/profile.jpg" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="1000 Álbuns" />
+
+  <!-- ── Twitter Card ── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@yurigenteboa" />
+  <meta name="twitter:creator" content="@yurigenteboa" />
+  <meta name="twitter:title" content="Meus 1000 Álbuns Favoritos de Todos os Tempos" />
+  <meta name="twitter:description" content="Curadoria pessoal de 1000 álbuns com estatísticas, mapa mundial e exploração por gênero." />
+  <meta name="twitter:image" content="https://yurigenteboa.github.io/topalbums/profile.jpg" />
+
+  <!-- ── Favicon ── -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💿</text></svg>" />
+  <link rel="apple-touch-icon" href="profile.jpg" />
+
+  <!-- ── Schema.org JSON-LD ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Meus 1000 Álbuns Favoritos de Todos os Tempos",
+    "description": "Curadoria pessoal dos 1000 álbuns favoritos de todos os tempos por Yuri.",
+    "url": "https://yurigenteboa.github.io/topalbums/",
+    "author": {
+      "@type": "Person",
+      "name": "Yuri",
+      "sameAs": [
+        "https://x.com/yurigenteboa",
+        "https://www.instagram.com/y0re/",
+        "https://www.last.fm/user/y0re",
+        "https://rateyourmusic.com/~yore"
+      ]
+    },
+    "inLanguage": "pt-BR"
+  }
+  </script>
+
   <!-- ── Fontes ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
@@ -13,12 +62,15 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.1/dist/css/jsvectormap.min.css"/>
 
   <!-- ── Estilos do projeto (separados em arquivos) ── -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="styles.css" />
 
   <!-- ── Chart.js (carregado no head pois é dependência crítica) ── -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
+
+<!-- Skip-to-content para acessibilidade com teclado -->
+<a href="#main-content" class="skip-link">Pular para o conteúdo</a>
 
 <!-- ══════════ TOPNAV ══════════ -->
 <header class="topnav">
@@ -48,16 +100,16 @@
         <input type="text" id="searchInput" placeholder="Buscar álbum, artista..." />
         <div id="searchSuggestions"></div>
       </div>
-      <div class="view-toggle">
-        <button class="view-btn active" id="viewGrid"    title="Grade normal" onclick="setView('grid')">⊞</button>
-        <button class="view-btn"        id="viewCompact" title="Grade compacta" onclick="setView('compact')">⊟</button>
-        <button class="view-btn"        id="viewList"    title="Lista" onclick="setView('list')">≡</button>
+      <div class="view-toggle" role="group" aria-label="Modo de visualização">
+        <button class="view-btn active" id="viewGrid"    title="Grade normal"   aria-label="Visualização em grade"    aria-pressed="true"  onclick="setView('grid')">⊞</button>
+        <button class="view-btn"        id="viewCompact" title="Grade compacta" aria-label="Visualização compacta"   aria-pressed="false" onclick="setView('compact')">⊟</button>
+        <button class="view-btn"        id="viewList"    title="Lista"          aria-label="Visualização em lista"   aria-pressed="false" onclick="setView('list')">≡</button>
       </div>
       <button class="view-btn" id="themeBtn" title="Alternar tema" onclick="toggleTheme()" style="border-color:rgba(255,255,255,0.15);font-size:16px">
         <span class="theme-btn-icon-dark">☀</span>
         <span class="theme-btn-icon-light">🌙</span>
       </button>
-      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
     </div>
   </div>
 </header>
@@ -221,7 +273,7 @@
 </div>
 
 <!-- ══════════ MAIN CONTENT ══════════ -->
-<main class="main-content">
+<main class="main-content" id="main-content">
 
   <!-- ── COLEÇÃO ── -->
   <div class="page active" id="page-collection">
@@ -586,14 +638,7 @@
 </div>
 
 <!-- ══════════ TOAST ══════════ -->
-<div class="toast" id="toast"></div>
-
-<!-- ══════════ SCRIPTS ══════════ -->
-
-<!-- ══════════ SCRIPTS ══════════ -->
-
-<!-- ══════════ TOAST ══════════ -->
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- ══════════════════════════════════════════════════════
      SCRIPTS — Ordem de carregamento importa!
@@ -601,50 +646,50 @@
 ═══════════════════════════════════════════════════════ -->
 
 <!-- 1. Dados dos 1000 álbuns -->
-<script src="js/albums_data.js"></script>
+<script src="albums_data.js"></script>
 
 <!-- 2. Bibliotecas externas -->
 <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.1/dist/js/jsvectormap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.1/dist/maps/world.js"></script>
 
 <!-- 3. Estado global e constantes -->
-<script src="js/state.js"></script>
+<script src="state.js"></script>
 
 <!-- 4. Utilitários: esc(), toast(), cache de capas, tema -->
-<script src="js/utils.js"></script>
+<script src="utils.js"></script>
 
 <!-- 5. Navegação entre páginas -->
-<script src="js/nav.js"></script>
+<script src="nav.js"></script>
 
 <!-- 6. Filtros: gênero, país, ano, década -->
-<script src="js/filters.js"></script>
+<script src="filters.js"></script>
 
 <!-- 7. Renderização: cards, lista, carrosséis -->
-<script src="js/render.js"></script>
+<script src="render.js"></script>
 
 <!-- 8. Modal do álbum: abertura, tracklist, tags -->
-<script src="js/modal.js"></script>
+<script src="modal.js"></script>
 
 <!-- 9. Busca de capas: iTunes, Deezer, Last.fm -->
-<script src="js/covers.js"></script>
+<script src="covers.js"></script>
 
 <!-- 10. Gráficos e estatísticas -->
-<script src="js/charts.js"></script>
+<script src="charts.js"></script>
 
 <!-- 11. Página de artistas -->
-<script src="js/artists.js"></script>
+<script src="artists.js"></script>
 
 <!-- 12. Demais páginas: mapa, sobre, quiz, vinil, shows, last.fm... -->
-<script src="js/pages.js"></script>
+<script src="pages.js"></script>
 
 <!-- 13. Inicialização: busca, favoritos, teclado, init -->
-<script src="js/init.js"></script>
+<script src="init.js"></script>
 
 <!-- 14. Sistema de temas e personalização visual -->
-<script src="js/themes.js"></script>
+<script src="themes.js"></script>
 
 <!-- 15. Interações: turntable, atalhos, animações -->
-<script src="js/interactions.js"></script>
+<script src="interactions.js"></script>
 
 </body>
 </html>
